@@ -1,0 +1,77 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct Tree
+{
+	Tree *lchild, * rchild;
+	
+	int value;
+}tree;
+
+tree * root;
+
+tree *creatTree(int *a, int *b, int n) // the preorder, inorder and the length of the string
+{
+	tree * t;
+	for(int i = 0;i < n;i ++) //search the root in inorder
+	{
+		if(a[0] == b[i])
+		{
+			t = (tree *)malloc(sizeof(tree));
+			t->value = b[i];
+			
+			t->lchild = creatTree(a + 1,b,i); //left recurrence
+			t->rchild = creatTree(a + i + 1, b + i + 1, n - i - 1); //right recurrence
+			
+			return t;
+		}
+	}
+	return NULL;
+}
+
+void printPostorder( tree * t)
+{
+	if(t != NULL)
+	{
+		printPostorder(t->lchild);
+		printPostorder(t->rchild);
+		
+		if(t == root)
+			printf("%d\n",t->value);
+		else
+			printf("%d ",t->value);
+	}
+}
+
+
+
+int main(int argc, char *argv[]) {
+	
+	
+	int n;// the number of nodes
+	
+	
+	while(cin >> n)
+	{
+		int a[2000],b[2000]; // store the preorder and inorder
+		root = NULL;
+		
+		for(int i = 0; i< n; i ++)
+		{
+			scanf("%d",&a[i]);
+		}
+		
+		for(int i = 0; i< n; i ++)
+		{
+			scanf("%d",&b[i]);
+		}
+		
+		root = creatTree(a,b,n);
+		tree *h = root;
+		printPostorder(h);
+	}
+	
+	
+	
+}
